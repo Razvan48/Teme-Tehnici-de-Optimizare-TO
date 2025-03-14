@@ -107,7 +107,6 @@ def problema1B():
 
 
 
-'''
 def rosenbrock(X) -> float:
     return 100.0 * (X[1] - X[0] ** 2) ** 2 + (1.0 - X[0]) ** 2
 
@@ -117,6 +116,8 @@ def problema2():
     solutiiNM = []
     solutiiPowell = []
     solutiiCG = []
+
+    solutiiCVXPY = []
 
     NUM_SOLUTII = 5
     MINIM = -100.0
@@ -130,6 +131,16 @@ def problema2():
     for _ in range(NUM_SOLUTII):
         X0 = np.random.uniform(MINIM, MAXIM, 2)
         solutiiCG.append(minimize(rosenbrock, X0, method='CG'))
+    '''
+    for _ in range(NUM_SOLUTII):
+        X0 = np.random.uniform(MINIM, MAXIM, 2)
+        X0 = cp.Variable(shape=2, value=X0)
+        obiectiv = cp.Minimize(100.0 * (X0[1] - X0[0] ** 2) ** 2 + (1.0 - X0[0]) ** 2)
+        constrangeri = []
+        problema = cp.Problem(obiectiv, constrangeri)
+        problema.solve(verbose=True)
+        solutiiCVXPY.append(X0.value)
+    '''
 
     print('Nelder-Mead')
     for sol in solutiiNM:
@@ -160,6 +171,8 @@ def problema2():
         axe.scatter(solutie.x[0], solutie.x[1], rosenbrock(solutie.x), c='green', s=100)
     for solutie in solutiiCG:
         axe.scatter(solutie.x[0], solutie.x[1], rosenbrock(solutie.x), c='blue', s=100)
+    for solutie in solutiiCVXPY:
+        axe.scatter(solutie[0], solutie[1], rosenbrock(solutie), c='yellow', s=100)
 
     axe.view_init(elev=90, azim=90)
 
@@ -167,8 +180,7 @@ def problema2():
 
 
 
-problema2()
-'''
+# problema2()
 
 
 
@@ -187,7 +199,6 @@ Minimizam functia obiectiv.
 
 
 
-'''
 def problema3CVXPY():
     # A.shape[0] == C.shape[0]
     # B.shape[0] == C.shape[1]
@@ -273,9 +284,8 @@ def problema3SCIPY():
 
 
 
-problema3CVXPY()
-problema3SCIPY()
-'''
+# problema3CVXPY()
+# problema3SCIPY()
 
 
 
@@ -294,7 +304,6 @@ B va avea shape-ul (a, 1)
 
 
 
-'''
 def problema4():
     x = 3
     q = 4
@@ -357,7 +366,6 @@ def problema4():
 
 
 
-problema4()
-'''
+# problema4()
 
 

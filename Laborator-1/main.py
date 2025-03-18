@@ -59,7 +59,7 @@ def problema1A():
 # Problema 1B
 #
 # Derivam expresia ce trebuie minimizata in raport cu U si obtinem gradientul, unde vom egala cu 0 fiecare componenta a sa, obtinand astfel constrangerile.
-# O componenta oarecare din gradient este de forma: U[i, j] - Y[i, j] + 2.0 * rho * (U[i + 1, j] + U[i, j + 1] - 2.0 * U[i, j])
+# O componenta oarecare din gradient este de forma: U[i, j] - Y[i, j] - 2.0 * rho * (U[i + 1, j] + U[i, j + 1] - 2.0 * U[i, j])
 # Shape-ul gradientului este acelasi cu shape-ul lui U, (m, n).
 def problema1B():
     imagineOriginala = cv.imread('imagineOriginalaTonuriGri.png')[:,:,0]
@@ -68,11 +68,11 @@ def problema1B():
     U = cp.Variable(shape=imagineOriginala.shape)
     Y = cp.Parameter(shape=imagineCorupta.shape, value=imagineCorupta)
     Z = cp.Parameter(shape=imagineOriginala.shape, value=imagineOriginala)
-    rho = 5.0
+    rho = 1.0
 
     obiectiv = cp.Minimize(cp.Constant(0.0))
 
-    constrangeri = [U[:-1,:-1] - Y[:-1,:-1] + 2.0 * rho * (U[1:,:-1] + U[:-1,1:] - 2.0 * U[:-1,:-1]) == 0.0]
+    constrangeri = [U[:-1,:-1] - Y[:-1,:-1] - 2.0 * rho * (U[1:,:-1] + U[:-1,1:] - 2.0 * U[:-1,:-1]) == 0.0]
 
     problema = cp.Problem(obiectiv, constrangeri)
 

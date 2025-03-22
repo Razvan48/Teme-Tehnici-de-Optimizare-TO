@@ -77,6 +77,8 @@ def b1(A, B, pragGradient, numarIteratii, L):
         if np.linalg.norm(gradient) < pragGradient:
             break
         X = urmatorulX
+
+        print('Iteratia:', iteratieCurenta, 'X:', X, 'Functie:', functie(A, B, X))
     return X
 
 
@@ -96,6 +98,8 @@ def c1(A, B, pragGradient, numarIteratii, L, dimensiuneBatch):
         if np.linalg.norm(gradient) < pragGradient:
             break
         X = urmatorulX
+
+        print('Iteratia:', iteratieCurenta, 'X:', X, 'Functie:', functie(A, B, X))
     return X
 
 
@@ -127,6 +131,8 @@ def d1(A, B, pragGradient, numarIteratii, L):
         if np.linalg.norm(gradient) < pragGradient:
             break
         X = urmatorulX
+
+        print('Iteratia:', iteratieCurenta, 'X:', X, 'Functie:', functie(A, B, X))
     return X
 
 

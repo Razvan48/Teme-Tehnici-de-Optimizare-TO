@@ -109,13 +109,13 @@ def b1(A, b, pragGradient, numarIteratii):
 
 b1(A, b, 10**-7, 15)
 
-def calculareGradientStocastic(A, b, dimensiuneBatch):
+def calculareGradientStohastic(A, b, dimensiuneBatch):
     SCALAR = 1000.0
-    gradientStocastic = np.zeros((A.shape[1], 1))
+    gradientStohastic = np.zeros((A.shape[1], 1))
     for valoareCurenta in range(dimensiuneBatch):
         xAleator = np.random.uniform(size=(A.shape[1], 1)) * SCALAR
-        gradientStocastic += A.T @ (A @ xAleator - b)
-    return gradientStocastic / dimensiuneBatch
+        gradientStohastic += A.T @ (A @ xAleator - b)
+    return gradientStohastic / dimensiuneBatch
 
 
 def c1(A, b, pragGradient, numarIteratii, dimensiuneBatch):
@@ -124,14 +124,14 @@ def c1(A, b, pragGradient, numarIteratii, dimensiuneBatch):
     L = max(np.linalg.eigvals(A))
     informatii = []
     for iteratieCurenta in range(numarIteratii):
-        gradientStocastic = calculareGradientStocastic(A, b, dimensiuneBatch)
+        gradientStohastic = calculareGradientStohastic(A, b, dimensiuneBatch)
 
         # alpha = alegereAlpha0(L)
-        # alpha = alegereAlpha1(A, b, x, gradientStocastic)
-        alpha = alegereAlpha2(A, b, x, gradientStocastic)
+        # alpha = alegereAlpha1(A, b, x, gradientStohastic)
+        alpha = alegereAlpha2(A, b, x, gradientStohastic)
 
-        urmatorulX = x - alpha * gradientStocastic
-        if np.linalg.norm(gradientStocastic) < pragGradient:
+        urmatorulX = x - alpha * gradientStohastic
+        if np.linalg.norm(gradientStohastic) < pragGradient:
             break
 
         if iteratieCurenta % NUMAR_ITERATII_PRINTARE == 0:
@@ -286,26 +286,26 @@ def coborarePeGradient(x, W, p, esteSediu, pragGradient, numarIteratii):
     return x
 
 
-def calculareGradientStocasticH(x, W, p, esteSediu, dimensiuneBatch):
+def calculareGradientStohasticH(x, W, p, esteSediu, dimensiuneBatch):
     SCALAR = 1000.0
-    gradientStocastic = np.zeros(x.shape)
+    gradientStohastic = np.zeros(x.shape)
     for valoareCurenta in range(dimensiuneBatch):
         xAleator = np.random.uniform(size=x.shape) * SCALAR
-        gradientStocastic += gradientH(xAleator, W, p, esteSediu)
-    return gradientStocastic / dimensiuneBatch
+        gradientStohastic += gradientH(xAleator, W, p, esteSediu)
+    return gradientStohastic / dimensiuneBatch
 
 
-def coborarePeGradientStocastic(x, W, p, esteSediu, pragGradient, numarIteratii, dimensiuneBatch):
+def coborarePeGradientStohastic(x, W, p, esteSediu, pragGradient, numarIteratii, dimensiuneBatch):
     NUMAR_ITERATII_PRINTARE = 10
     informatii = []
     for iteratieCurenta in range(numarIteratii):
-        gradientStocastic = calculareGradientStocasticH(x, W, p, esteSediu, dimensiuneBatch)
+        gradientStohastic = calculareGradientStohasticH(x, W, p, esteSediu, dimensiuneBatch)
 
         # alpha = alegereAlpha3(x, W, p, esteSediu)
         alpha = alegereAlpha4(x, W, p, esteSediu)
 
-        urmatorulX = x - alpha * gradientStocastic
-        if np.linalg.norm(gradientStocastic) < pragGradient:
+        urmatorulX = x - alpha * gradientStohastic
+        if np.linalg.norm(gradientStohastic) < pragGradient:
             break
 
         valoareFunctie = calculH(x, W, p)
@@ -318,7 +318,7 @@ def coborarePeGradientStocastic(x, W, p, esteSediu, pragGradient, numarIteratii,
     plt.plot([i for i in range(len(informatii))], [informatie[1] for informatie in informatii], color='blue')
     plt.xlabel('Iteratii')
     plt.ylabel('Functie Obiectiv')
-    plt.title('Exercitiul 2 - Coborare pe Gradient Stocastic')
+    plt.title('Exercitiul 2 - Coborare pe Gradient Stohastic')
     plt.show()
 
     return x
@@ -362,7 +362,7 @@ def exercitiul2():
 
     xInitial = copy.deepcopy(x)
     xFinal = coborarePeGradient(x, W, p, esteSediu, 10**-7, 2)
-    # xFinal = coborarePeGradientStocastic(x, W, p, esteSediu, 10**-7, 6, 500)
+    # xFinal = coborarePeGradientStohastic(x, W, p, esteSediu, 10**-7, 6, 500)
 
     desenarePuncte(xInitial, xFinal, esteSediu)
 

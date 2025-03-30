@@ -13,13 +13,14 @@ import copy
 # Aceasta matrice diagonala este inversabila, deoarece toate elementele de pe diagonala sunt nenule.
 # Solutia problemei este x = A^(-1) * b si este unica.
 def a1():
+    EPSILON = 10**-5
     VAL_PESTE_K = 10**1
-    VAL_MIN = 10**3
+    VAL_MIN = 10**3 + EPSILON
     VAL_PESTE_MIN = 10**1
     VALOARE_PROPRIE_MIN = 0.000001
 
     n = 2
-    k = 10**6
+    k = 10**6 + EPSILON
 
     A = np.diag([VALOARE_PROPRIE_MIN, VALOARE_PROPRIE_MIN * k] + [VALOARE_PROPRIE_MIN] * (n - 2))
     b = np.array([VAL_MIN * VALOARE_PROPRIE_MIN / np.sqrt(n), VAL_MIN * VALOARE_PROPRIE_MIN * k / np.sqrt(n)] + [VAL_MIN * VALOARE_PROPRIE_MIN / np.sqrt(n)] * (n - 2)).reshape(n, 1)
@@ -107,9 +108,9 @@ def b1(A, b, pragGradient, numarIteratii):
     return x
 
 
-b1(A, b, 10**-7, 15)
+b1(A, b, 10**-13, 15)
 
-def calculareGradientStohastic(A, b, dimensiuneBatch):
+def calculareGradientStohastic0(A, b, dimensiuneBatch):
     SCALAR = 1000.0
     gradientStohastic = np.zeros((A.shape[1], 1))
     for valoareCurenta in range(dimensiuneBatch):
@@ -118,13 +119,28 @@ def calculareGradientStohastic(A, b, dimensiuneBatch):
     return gradientStohastic / dimensiuneBatch
 
 
+def calculareGradientStohastic1(A, b, x, dimensiuneBatch):
+    gradientReal = A.T @ (A @ x - b)
+
+    if dimensiuneBatch > gradientReal.shape[0]:
+        return gradientReal
+
+    indexiLinii = np.random.choice(gradientReal.shape[0], size=dimensiuneBatch, replace=False)
+
+    gradientStohastic = np.zeros(gradientReal.shape)
+    gradientStohastic[indexiLinii] = gradientReal[indexiLinii]
+
+    return gradientStohastic
+
+
 def c1(A, b, pragGradient, numarIteratii, dimensiuneBatch):
     NUMAR_ITERATII_PRINTARE = 10
     x = np.array([500.0] * A.shape[1]).reshape(A.shape[1], 1)
     L = max(np.linalg.eigvals(A))
     informatii = []
     for iteratieCurenta in range(numarIteratii):
-        gradientStohastic = calculareGradientStohastic(A, b, dimensiuneBatch)
+        # gradientStohastic = calculareGradientStohastic0(A, b, dimensiuneBatch)
+        gradientStohastic = calculareGradientStohastic1(A, b, x, dimensiuneBatch)
 
         # alpha = alegereAlpha0(L)
         # alpha = alegereAlpha1(A, b, x, gradientStohastic)
@@ -149,7 +165,7 @@ def c1(A, b, pragGradient, numarIteratii, dimensiuneBatch):
     return x
 
 
-c1(A, b, 10**-7, 15, 100)
+c1(A, b, 10**-13, 15, 1)
 
 
 def generarePseudoGradient(A, b, x):
@@ -198,7 +214,7 @@ def d1(A, b, pragGradient, numarIteratii):
     return x
 
 
-d1(A, b, 10**-7, 15)
+d1(A, b, 10**-13, 15)
 
 
 # Exercitiul 2
@@ -263,8 +279,8 @@ def coborarePeGradient(x, W, p, esteSediu, pragGradient, numarIteratii):
     for iteratieCurenta in range(numarIteratii):
         gradient = gradientH(x, W, p, esteSediu)
 
-        alpha = alegereAlpha3(x, W, p, esteSediu)
-        # alpha = alegereAlpha4(x, W, p, esteSediu)
+        # alpha = alegereAlpha3(x, W, p, esteSediu)
+        alpha = alegereAlpha4(x, W, p, esteSediu)
 
         urmatorulX = x - alpha * gradient
         if np.linalg.norm(gradient) < pragGradient:
@@ -286,7 +302,7 @@ def coborarePeGradient(x, W, p, esteSediu, pragGradient, numarIteratii):
     return x
 
 
-def calculareGradientStohasticH(x, W, p, esteSediu, dimensiuneBatch):
+def calculareGradientStohasticH0(x, W, p, esteSediu, dimensiuneBatch):
     SCALAR = 1000.0
     gradientStohastic = np.zeros(x.shape)
     for valoareCurenta in range(dimensiuneBatch):
@@ -295,18 +311,33 @@ def calculareGradientStohasticH(x, W, p, esteSediu, dimensiuneBatch):
     return gradientStohastic / dimensiuneBatch
 
 
+def calculareGradientStohasticH1(x, W, p, esteSediu, dimensiuneBatch):
+    gradientReal = gradientH(x, W, p, esteSediu)
+
+    if dimensiuneBatch > gradientReal.shape[0]:
+        return gradientReal
+
+    indexiLinii = np.random.choice(gradientReal.shape[0], size=dimensiuneBatch, replace=False)
+
+    gradientStohastic = np.zeros(gradientReal.shape)
+    gradientStohastic[indexiLinii] = gradientReal[indexiLinii]
+
+    return gradientStohastic
+
+
 def coborarePeGradientStohastic(x, W, p, esteSediu, pragGradient, numarIteratii, dimensiuneBatch):
     NUMAR_ITERATII_PRINTARE = 10
     informatii = []
     for iteratieCurenta in range(numarIteratii):
-        gradientStohastic = calculareGradientStohasticH(x, W, p, esteSediu, dimensiuneBatch)
+        # gradientStohastic = calculareGradientStohasticH0(x, W, p, esteSediu, dimensiuneBatch)
+        gradientStohastic = calculareGradientStohasticH1(x, W, p, esteSediu, dimensiuneBatch)
 
         # alpha = alegereAlpha3(x, W, p, esteSediu)
         alpha = alegereAlpha4(x, W, p, esteSediu)
 
         urmatorulX = x - alpha * gradientStohastic
-        if np.linalg.norm(gradientStohastic) < pragGradient:
-            break
+        #if np.linalg.norm(gradientStohastic) < pragGradient:
+        #    break
 
         valoareFunctie = calculH(x, W, p)
         if iteratieCurenta % NUMAR_ITERATII_PRINTARE == 0:
@@ -342,10 +373,10 @@ def desenarePuncte(xInitial, xFinal, esteSediu):
 
 def exercitiul2():
     x = np.array([
-        [0.0, 0.0],
-        [0.0, 10.0],
-        [10.0, 0.0],
-        [10.0, 10.0],
+        [-25.0, -25.0],
+        [-25.0, 25.0],
+        [25.0, -25.0],
+        [25.0, 25.0],
 
         [1.0, 1.0],
         [5.0, 1.0],
@@ -361,9 +392,10 @@ def exercitiul2():
     esteSediu = np.array([False, False, False, False, True, True, True, True, True, True, True, True])
 
     xInitial = copy.deepcopy(x)
-    xFinal = coborarePeGradient(x, W, p, esteSediu, 10**-7, 2)
-    # xFinal = coborarePeGradientStohastic(x, W, p, esteSediu, 10**-7, 6, 500)
+    xFinal = coborarePeGradient(x, W, p, esteSediu, 10**-13, 7)
+    # xFinal = coborarePeGradientStohastic(x, W, p, esteSediu, 10**-13, 20, 1)
 
+    # Cu rosu desenam pozitiile initiale ale punctelor mobile, cu negru pozitiile initiale ale punctelor fixe, iar cu verde pozitiile finale ale punctelor mobile.
     desenarePuncte(xInitial, xFinal, esteSediu)
 
     print('xInitial:', xInitial)

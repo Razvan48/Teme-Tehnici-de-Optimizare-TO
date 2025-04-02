@@ -76,7 +76,7 @@ def solutieCVXPY(y, rho):
     return solutie
 
 
-# solutieCVX = solutieCVXPY(y, 0.3)
+solutieCVX = solutieCVXPY(y, 0.3)
 
 
 def desenareSolutie(y, solutie):
@@ -96,7 +96,7 @@ def desenareSolutie(y, solutie):
     plt.show()
 
 
-# desenareSolutie(y, solutieCVX)
+desenareSolutie(y, solutieCVX)
 
 
 def calculDualitateLagrange(D, miu, y, valoareNegata):
@@ -166,8 +166,8 @@ def metodaGradientProiectat(y, rho, numarIteratii, pragGradient):
     return x
 
 
-# solutieMGP = metodaGradientProiectat(y, 1000.0, 100, 10**-3)
-# desenareSolutie(y, solutieMGP)
+solutieMGP = metodaGradientProiectat(y, 1000.0, 100, 10**-3)
+desenareSolutie(y, solutieMGP)
 
 
 def eliminareGaussianaPentadiagonala(A, y):
@@ -175,7 +175,7 @@ def eliminareGaussianaPentadiagonala(A, y):
 
     DIAGONALITATE = 5
 
-    print('A:', A)
+    print('A Pre-Eliminare-Gaussiana:', A)
 
     x = np.zeros(y.shape[0])
     for iteratie in range(DIAGONALITATE // 2):
@@ -197,6 +197,8 @@ def eliminareGaussianaPentadiagonala(A, y):
         for coloana in range(dreapta, stanga, -1):
             solutieCurenta -= A[linie, coloana] * x[coloana]
         x[stanga] = solutieCurenta / A[linie, stanga]
+
+    print('A Post-Eliminare-Gaussiana:', A)
 
     return x
 
@@ -234,7 +236,9 @@ def comparareSolutii(solutie0, solutie1):
     plt.show()
 
 
-# comparareSolutii(solutieMGP, solutieTridiagonala)
+comparareSolutii(solutieMGP, solutieTridiagonala)
+
+
 
 
 

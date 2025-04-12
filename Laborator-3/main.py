@@ -67,7 +67,7 @@ def solutieCVXPY(y, rho):
     rhoCvxpy = cp.Parameter(nonneg=True, value=rho)
     DCvxpy = cp.Parameter(D.shape, value=D)
 
-    obiectiv = cp.Minimize(0.5 * cp.norm(xCvxpy - yCvxpy, 2) + rhoCvxpy * cp.norm(DCvxpy @ xCvxpy, 1))
+    obiectiv = cp.Minimize(0.5 * cp.norm(xCvxpy - yCvxpy, 2) ** 2 + rhoCvxpy * cp.norm(DCvxpy @ xCvxpy, 1))
 
     problema = cp.Problem(obiectiv)
     problema.solve()

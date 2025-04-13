@@ -203,6 +203,24 @@ def eliminareGaussianaPentadiagonala(A, y):
     return x
 
 
+def inmultire_matrice_tridiagonala(A, B):
+    C = np.zeros((A.shape[0], B.shape[1]))
+
+    DIAGONALITATE = 3
+
+    for linie in range(A.shape[0]):
+        for coloana in range(B.shape[1]):
+            suma = 0.0
+            kStart = linie - (DIAGONALITATE - 1)
+            kMinim = max(0, kStart)
+            kMaxim = min(kStart + DIAGONALITATE - 1, A.shape[1] - 1)
+            for k in range(kMinim, kMaxim + 1):
+                suma += A[linie, k] * B[k, coloana]
+            C[linie, coloana] = suma
+
+    return C
+
+
 def metodaTridiagonala(y, rho):
     D = np.zeros((y.shape[0] - 2, y.shape[0]))
     for i in range(0, D.shape[0]):
@@ -210,7 +228,7 @@ def metodaTridiagonala(y, rho):
         D[i, i + 1] = -2.0
         D[i, i + 2] = 1.0
 
-    A = np.eye(y.shape[0]) + 2.0 * rho * D.T @ D
+    A = np.eye(y.shape[0]) + 2.0 * rho * inmultire_matrice_tridiagonala(D.T, D)
 
     return eliminareGaussianaPentadiagonala(A, y)
 
@@ -237,6 +255,9 @@ def comparareSolutii(solutie0, solutie1):
 
 
 comparareSolutii(solutieMGP, solutieTridiagonala)
+
+
+
 
 
 

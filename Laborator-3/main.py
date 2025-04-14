@@ -76,10 +76,10 @@ def solutieCVXPY(y, rho):
     return solutie
 
 
-solutieCVX = solutieCVXPY(y, 0.3)
+solutieCVX = solutieCVXPY(y, 10.0)
 
 
-def desenareSolutie(y, solutie):
+def desenareSolutie(y, solutie, titlu):
     figura, axe = plt.subplots(1, 2, figsize=(12, 5))
 
     axe[0].plot(y, color='red')
@@ -90,13 +90,13 @@ def desenareSolutie(y, solutie):
     axe[1].plot(solutie, color='blue')
     axe[1].set_xlabel('Timp')
     axe[1].set_ylabel('Valoare Serie Solutie')
-    axe[1].set_title('Serie de Timp Solutie')
+    axe[1].set_title(f'Serie de Timp Solutie {titlu}')
 
     plt.tight_layout()
     plt.show()
 
 
-desenareSolutie(y, solutieCVX)
+desenareSolutie(y, solutieCVX, 'CVXPY')
 
 
 def calculDualitateLagrange(D, miu, y, valoareNegata):
@@ -167,7 +167,7 @@ def metodaGradientProiectat(y, rho, numarIteratii, pragGradient):
 
 
 solutieMGP = metodaGradientProiectat(y, 1000.0, 100, 10**-3)
-desenareSolutie(y, solutieMGP)
+desenareSolutie(y, solutieMGP, 'MGP')
 
 
 def eliminareGaussianaPentadiagonala(A, y):
@@ -234,27 +234,27 @@ def metodaTridiagonala(y, rho):
 
 
 solutieTridiagonala = metodaTridiagonala(y, 100.0)
-desenareSolutie(y, solutieTridiagonala)
+desenareSolutie(y, solutieTridiagonala, 'Eliminare Gaussiana')
 
 
-def comparareSolutii(solutie0, solutie1):
+def comparareSolutii(solutie0, solutie1, titlu0, titlu1):
     figura, axe = plt.subplots(1, 2, figsize=(12, 5))
 
     axe[0].plot(solutie0, color='red')
     axe[0].set_xlabel('Timp')
     axe[0].set_ylabel('Valoare Serie 1')
-    axe[0].set_title('Serie de Timp 1')
+    axe[0].set_title(f'Serie de Timp {titlu0}')
 
     axe[1].plot(solutie1, color='blue')
     axe[1].set_xlabel('Timp')
     axe[1].set_ylabel('Valoare Serie 2')
-    axe[1].set_title('Serie de Timp 2')
+    axe[1].set_title(f'Serie de Timp {titlu1}')
 
     plt.tight_layout()
     plt.show()
 
 
-comparareSolutii(solutieMGP, solutieTridiagonala)
+comparareSolutii(solutieMGP, solutieTridiagonala, 'MGP', 'Eliminare Gaussiana')
 
 
 

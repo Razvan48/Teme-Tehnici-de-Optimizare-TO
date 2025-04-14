@@ -10,7 +10,8 @@ def generareSerieDeTimp(dimensiune):
     DEVIATIE = 1.0
 
     z = np.random.normal(loc=MEDIE, scale=DEVIATIE, size=dimensiune)
-    p = np.random.uniform(low=0.0, high=1.0)
+    # p = np.random.uniform(low=0.0, high=1.0)
+    p = 0.95
 
     v = np.zeros(dimensiune)
     v[0] = np.random.uniform(low=-1.0, high=1.0) * SCALAR
@@ -166,7 +167,7 @@ def metodaGradientProiectat(y, rho, numarIteratii, pragGradient):
     return x
 
 
-solutieMGP = metodaGradientProiectat(y, 1000.0, 100, 10**-3)
+solutieMGP = metodaGradientProiectat(y, 10.0, 100, 10**-3)
 desenareSolutie(y, solutieMGP, 'MGP')
 
 
@@ -233,12 +234,15 @@ def metodaTridiagonala(y, rho):
     return eliminareGaussianaPentadiagonala(A, y)
 
 
-solutieTridiagonala = metodaTridiagonala(y, 100.0)
+solutieTridiagonala = metodaTridiagonala(y, 10.0)
 desenareSolutie(y, solutieTridiagonala, 'Eliminare Gaussiana')
 
 
 def comparareSolutii(solutie0, solutie1, titlu0, titlu1):
     figura, axe = plt.subplots(1, 2, figsize=(12, 5))
+
+    print(f'Norma {titlu0}:', np.linalg.norm(y - solutie0, 2))
+    print(f'Norma {titlu1}:', np.linalg.norm(y - solutie1, 2))
 
     axe[0].plot(solutie0, color='red')
     axe[0].set_xlabel('Timp')
@@ -255,6 +259,9 @@ def comparareSolutii(solutie0, solutie1, titlu0, titlu1):
 
 
 comparareSolutii(solutieMGP, solutieTridiagonala, 'MGP', 'Eliminare Gaussiana')
+
+
+
 
 
 

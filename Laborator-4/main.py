@@ -169,7 +169,7 @@ def coborarePeGradientDualEx2(x, etichete, w, b, RHO, MIU):
 
     EPSILON_CRITERIU_OPRIRE = 1e-2
     LAMBDA_0 = np.full((x.shape[0], 1), 1.0)
-    RATA_DE_INVATARE = 0.01
+    RATA_DE_INVATARE = 0.001
     NUMAR_ITERATII = 10000
 
     Q = np.array([(etichete[i] * x[i]).tolist() for i in range(x.shape[0])])
@@ -203,13 +203,15 @@ def coborarePeGradientDualEx2(x, etichete, w, b, RHO, MIU):
     wOptim = np.zeros((x.shape[1], 1))
     for i in range(x.shape[0]):
         wOptim += lambdaCurent[i] * etichete[i] * x[i].reshape((x.shape[1], 1))
-    bOptim = np.mean(etichete - np.dot(x, wOptim))
+    bOptim = 0.0
 
     EPSILON = 1e-10
     vectoriiSuport = [False for _ in range(x.shape[0])]
+    '''
     for i in range(x.shape[0]):
         if etichete[i][0] * (np.dot(wOptim.reshape(wOptim.shape[0]), x[i]) + bOptim) - 1 < EPSILON:
             vectoriiSuport[i] = True
+    '''
 
     afiseazaEvolutieFunctie(valoriFunctie)
     comparaDrepteleSeparatoare(x, etichete, w, b, wOptim, bOptim, vectoriiSuport)
@@ -222,7 +224,7 @@ def ex2():
     x, etichete, w, b = genereazaPuncteSeparabile(m, n)
     etichete = adaugareZgomot(etichete, 0.05)
     afiseazaPuncte(x, etichete, w, b)
-    coborarePeGradientDualEx2(x, etichete, w, b, 1.0, 1.0)
+    coborarePeGradientDualEx2(x, etichete, w, b, 10000.0, 10000.0)
 
 
 ex2()

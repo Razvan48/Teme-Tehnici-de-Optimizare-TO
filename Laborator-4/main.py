@@ -203,7 +203,7 @@ def coborarePeGradientDualEx2(x, etichete, w, b, RHO, MIU):
     wOptim = np.zeros((x.shape[1], 1))
     for i in range(x.shape[0]):
         wOptim += lambdaCurent[i] * etichete[i] * x[i].reshape((x.shape[1], 1))
-    bOptim = 0.0
+    bOptim = np.mean(etichete - np.dot(x, wOptim))
 
     EPSILON = 1e-10
     vectoriiSuport = [False for _ in range(x.shape[0])]
